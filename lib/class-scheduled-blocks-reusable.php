@@ -44,10 +44,11 @@ class Scheduled_Blocks_Reusable {
 		// Add 'block' to the parsed list of blocks
 		add_filter( 'scheduled_blocks_valid_block_types', array( $this, 'scheduled_blocks_valid_block_types__add_block_type' ) );
 
+		// Mark a reusable block so we're able to capture it later.
 		add_filter( 'scheduled_blocks_get_usable_data_from_block_details_start', array( $this, 'scheduled_blocks_get_usable_data_from_block_details_start__mark_block_as_reusable' ) );
 
 		// Hook in to where we have initially parsed reusable blocks and mark them as reusable here
-		add_action( 'scheduled_blocks_get_usable_data_from_block_details_handle_reusable', array( $this, 'scheduled_blocks_get_usable_data_from_block_details_handle_reusable__mark_as_reusable' ) );
+		add_action( 'scheduled_blocks_get_usable_data_from_block_details_handle_special', array( $this, 'scheduled_blocks_get_usable_data_from_block_details_handle_reusable__mark_as_reusable' ) );
 
 		// Filter the_content to remove blocks (mostly reusable) after Gutenberg has parsed it
 		add_filter( 'the_content', array( $this, 'the_content__filter_content_after_gutenberg' ), 15 );
@@ -61,11 +62,7 @@ class Scheduled_Blocks_Reusable {
 	 * @param array $block_types The currently parsed block types.
 	 * @return array Modified block types.
 	 */
-	public function scheduled_blocks_valid_block_types__add_block_type( $block_types ) {
-
-		if ( ! is_array( $block_types ) ) {
-			$block_types = array();
-		}
+	public function scheduled_blocks_valid_block_types__add_block_type( $block_types = array() ) {
 
 		$block_types[] = 'block';
 
@@ -110,6 +107,10 @@ class Scheduled_Blocks_Reusable {
 	 * @return void
 	 */
 	public function scheduled_blocks_get_usable_data_from_block_details_handle_reusable__mark_as_reusable( $block_details ) {
+
+		if ( ! isset( $block_details['reusable'] ) ) {
+			return;
+		}
 
 		// We've already been around and found a reusable block. We now handle this separately.
 		// We need to determine if this block within a reusable block should be removed. If so
