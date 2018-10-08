@@ -11,7 +11,7 @@
  * Plugin Name:  Scheduled Blocks Reusable Blocks Add-On
  * Plugin URI:   https://scheduledblocks.com/add-ons/reusable
  * Description:  Schedule when your reusable blocks go live. An add-on for Scheduled Blocks.
- * Version:      0.1.0
+ * Version:      0.1.1
  * Author:       Richard Tape
  * Requires PHP: 7
  * Author URI:   https://scheduledblocks.com/
